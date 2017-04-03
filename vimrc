@@ -396,7 +396,7 @@ filetype plugin indent on    " required
 
         " tag auto switch  ----------- {{{
         function! TagAutoSwitch1()
-            let tags_pre_dir='/home/vim_tags_dir/'
+            let tags_pre_dir=expand($HOME . '/vim_tags_dir/')
 
             " __PROJECTLIST_SED_BEGIN__
             let project_dicts = {

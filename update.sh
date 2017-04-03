@@ -30,14 +30,20 @@ UpdateParam()
 		exit 1
     fi
 
-	PLUGIN_DIR="$HOME/.rd"
+	VIM_CONFIG="$HOME/.vimrc"
+
 	PROGRAM_FULL_NAME=`cd $1; pwd`
 	PROGRAM_BASE_NAME=`basename $1`
-    TAGS_FATHER_DIR="/home/vim_tags_dir"
+
+    TAGS_FATHER_DIR="$HOME/vim_tags_dir"
 	TAGS_DIR="$TAGS_FATHER_DIR/$PROGRAM_BASE_NAME"
-	VIM_CONFIG="$HOME/.vimrc"
-	PROGLIST="$PLUGIN_DIR/.proglist"
+	PROGLIST="$TAGS_FATHER_DIR/.proglist"
+
 	TMP_FILE_LIST=
+
+    if [ ! -d "$TAGS_FATHER_DIR" ];then
+        mkdir -p $TAGS_FATHER_DIR
+    fi
 }
 
 ErrorExit()

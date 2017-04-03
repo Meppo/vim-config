@@ -29,7 +29,7 @@ This is my vim config file and shell script file used to generate cscope/tags fi
 
    ./update.sh -a /opt/work/YOUR_PROJECT 
    
-   the command will create ctags and cscope files for YOUR_PROJECT at /home/vim_tags_dir/ and add this path to the vim config file $HOME/.vimrc, then the vim will find this cscope/tags file automatically when you edit the files of YOUR_PROJECT.
+   the command will create ctags and cscope files for YOUR_PROJECT at $HOME/vim_tags_dir/ and add this path to the vim config file $HOME/.vimrc, then the vim will find this cscope/tags file automatically when you edit the files of YOUR_PROJECT.
    
 6. now edit your project's file and try it.
 

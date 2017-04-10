@@ -418,12 +418,22 @@ filetype plugin indent on    " required
                     let tag_str = tags_pre_dir . project_name . "/tags"
                     let cscope_str = tags_pre_dir . project_name . "/cscope.out"
                     exe 'set tags='.tag_str
-                    exe 'cs reset'
-                    exe 'set nocsverb'
-                    exe 'cs add ' . cscope_str . " " . project_dicts[project_name]
-                    exe 'cd ' . project_dicts[project_name]
-                    "let result = exe 'cs show'
-                    "echom "3333 result=". result
+                    
+                    if cscope_connection(1, project_name)
+                        " echom "already connect " . project_name . "'cscope.out!"
+                    else
+                        exe 'cs reset'
+                        exe 'set nocsverb'
+                        exe 'cs add ' . cscope_str . " " . project_dicts[project_name]
+                        exe 'cd ' . project_dicts[project_name]
+                    endif
+
+                    " ignore the file no suffix or suffix with .c/h file like
+                    "   MAKEFILE, MODEL, test.gif and so on
+                    let g:ctrlp_custom_ignore = {
+                            \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+                            \ 'file': '\v(\.[^ch]|[^.]\w$)',
+                            \ }
                 endif
             endfor
         endfunction

@@ -428,7 +428,7 @@ filetype plugin indent on    " required
                         exe 'cd ' . project_dicts[project_name]
                     endif
 
-                    " ignore the file no suffix or suffix with .c/h file like
+                    " ignore the file no suffix or suffix without .c/h file like
                     "   MAKEFILE, MODEL, test.gif and so on
                     let g:ctrlp_custom_ignore = {
                             \ 'dir':  '\v[\/]\.(git|hg|svn)$',

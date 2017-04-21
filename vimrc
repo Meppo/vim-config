@@ -1,4 +1,4 @@
-" Last change:	2017/04/03
+" Last change:	2017/04/21
 "
 " To use it, copy it to
 "     for Unix and OS/2:  ~/.vimrc
@@ -108,7 +108,7 @@
 
     set tabpagemax=15               " Only show 15 tabs
     set showmode                    " Display the current mode
-    set cursorline                  " Highlight current line
+    " set cursorline                  " Highlight current line
 
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
@@ -120,31 +120,6 @@
         set showcmd                 " Show partial commands in status line and
                                     " Selected characters/lines in visual mode
     endif
-
-    ""if has('statusline')
-    ""    set laststatus=2
-
-    ""    " Broken down into easily includeable segments
-    ""    set statusline=%<%f\                     " Filename
-    ""    set statusline+=%w%h%m%r                 " Options
-    ""    if !exists('g:override_spf13_bundles')
-    ""        set statusline+=%{fugitive#statusline()} " Git Hotness
-    ""    endif
-    ""    set statusline+=\ [%{&ff}/%Y]            " Filetype
-    ""    set statusline+=\ [%{getcwd()}]          " Current dir
-    ""    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-    ""endif
-    augroup statusline
-        autocmd!
-        autocmd FileType * :setlocal statusline=%F
-        autocmd FileType * :setlocal statusline+=[%n]
-        autocmd FileType * :setlocal statusline+=%=
-        autocmd FileType * :setlocal statusline+=%l
-        autocmd FileType * :setlocal statusline+=,
-        autocmd FileType * :setlocal statusline+=%c-%v
-        autocmd FileType * :setlocal statusline+=\ 
-        autocmd FileType * :setlocal statusline+=%p%%
-    augroup END
 
     set backspace=indent,eol,start  " Backspace for dummies
     set linespace=0                 " No extra spaces between rows
@@ -181,7 +156,7 @@
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
     " Remove trailing whitespaces and ^M chars
-    autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    " autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
 
     "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
@@ -226,27 +201,8 @@
     " Yank from the cursor to the end of the line, to be consistent with C and D.
     nnoremap Y y$
 
-    " Code folding options
-    nmap <leader>f0 :set foldlevel=0<CR>
-    nmap <leader>f1 :set foldlevel=1<CR>
-    nmap <leader>f2 :set foldlevel=2<CR>
-    nmap <leader>f3 :set foldlevel=3<CR>
-    nmap <leader>f4 :set foldlevel=4<CR>
-    nmap <leader>f5 :set foldlevel=5<CR>
-    nmap <leader>f6 :set foldlevel=6<CR>
-    nmap <leader>f7 :set foldlevel=7<CR>
-    nmap <leader>f8 :set foldlevel=8<CR>
-    nmap <leader>f9 :set foldlevel=9<CR>
-
     " toggle search highlighting 
     nnoremap <localleader>/ :nohlsearch<cr>
-
-    " Visual shifting (does not exit Visual mode)
-    vnoremap < <gv
-    vnoremap > >gv
-
-    " Allow using the repeat operator with a visual selection (!)
-    vnoremap . :normal .<CR>
 
     " Map <Leader>ff to display all lines with keyword under cursor
     " and ask which one to jump to
@@ -267,21 +223,6 @@
     " create abbreviation: -- ywjssig => my email
     iabbrev ywjssig -- <cr>WenJin Yang<cr>yang.wenjin1234@qq.com
 
-    " add " for word
-    nnoremap <localleader>" viw<esc>a"<esc>hbi"<esc>lel
-    inoremap <localleader>' <esc>ebea"<esc>hbi"<esc>lela
-    vnoremap <localleader>" iw<esc>a"<esc>hbi"<esc>lel
-
-    " highlight extra space
-    highlight Error ctermbg=red guibg=red
-    nnoremap <localleader>w :match Error /\v {2,}/<cr>
-    nnoremap <localleader>W :match none<cr>
-
-
-    " for grep
-    "nnoremap <localleader>g :silent execute "grep! -R " . shellescape(expand("<cWORD>")) . " ."<cr>:copen 5<cr>
-    "nnoremap <localleader>n :cnext<cr>
-    "nnoremap <localleader>p :cprevious<cr>
 " }}}
 
 " Vundle settings {{{
@@ -304,14 +245,30 @@ Plugin 'VundleVim/Vundle.vim'
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
 Plugin 'tomasr/molokai' " 配色
-Plugin 'vim-scripts/winmanager' " 多窗口管理插件 :wm
+Plugin 'vim-scripts/winmanager'      " 多窗口管理插件 :wm
 Plugin 'vim-scripts/minibufexpl.vim' "顶部buffer列表插件
-Plugin 'vim-scripts/taglist.vim'  " 左边ctag函数列表
-Plugin 'vim-scripts/genutils'     " lookupfile 依赖插件
-Plugin 'eikenb/acp'               " 自动补全插件
-Plugin 'vim-scripts/AutoClose'    " 自动补全另一边括号 引号等插件
-Plugin 'vim-scripts/snipper'      " 识别不同类型语言的关键字语法插件
-Plugin 'kien/ctrlp.vim'   " 快速搜索文件工具
+Plugin 'vim-scripts/taglist.vim'     " 左边ctag函数列表
+Plugin 'vim-scripts/AutoClose'       " 自动补全另一边括号 引号等插件
+Plugin 'vim-scripts/snipper'         " 识别不同类型语言的关键字语法插件
+Plugin 'kien/ctrlp.vim'              " 快速搜索文件工具
+Plugin 'scrooloose/nerdcommenter'    " 快速增加注释工具
+"Plugin 'Valloric/YouCompleteMe'      " 自动补全插件
+Plugin 'eikenb/acp'                " 简单的自动补全插件, 懒得安装时用来替换 YouCompleteMe
+Plugin 'klen/python-mode'            " python功能插件
+Plugin 'easymotion/vim-easymotion'   " 快速移动插件
+Plugin 'tpope/vim-surround'          " 增加/修改/删除 引号,括号等
+Plugin 'vim-scripts/Emmet.vim'       " HTML/CSS等免除重复劳动
+Plugin 'Lokaltog/vim-powerline'      " 状态栏增强
+
+
+"Hello world!"
+    " [ 123+456 ]/2
+"Look ma, I'm HTML!"
+" if ( x>3 ) {
+" my $str = 'whee!';
+" <div>Yo!</div>
+" <div>Yo!</div>
+
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'lookupfile.vim'
@@ -334,7 +291,6 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " }}}
-"
 
 " Plugins {{{
 
@@ -364,43 +320,181 @@ filetype plugin indent on    " required
         let g:ctrlp_open_new_file = 'r'
         " <c-z> <c-o>找开多个文件时 窗口的显示
         let g:ctrlp_open_multiple_files = 'jr'
+
+    " }
+
+    " miniBufexpl.vim settings ----------- {
+        let g:miniBufExplMapCTabSwitchBufs=1
+        let g:miniBufExplMapWindowNavVim=1
+        let g:miniBufExplSplitBelow=0
+        let g:miniBufExplModSelTarget = 1
     " }
 
     " cscope settings ----------- {
-        set cscopequickfix=s-,c-,d-,i-,t-,e-
-        "查找声明
-        map ,ss :cs find s <C-R>=expand("<cword>")<CR><CR>
-        "查找定义
-        map ,sg :cs find g <C-R>=expand("<cword>")<CR><CR>
-        "查找调用
-        map ,sc :cs find c <C-R>=expand("<cword>")<CR><CR>
-        "查找指定字符串
-        map ,st :cs find t <C-R>=expand("<cword>")<CR><CR>
-        "查找egrep模式
-        map ,se :cs find e <C-R>=expand("<cword>")<CR><CR>
-        "查找文件
-        map ,sf :cs find f <C-R>=expand("<cfile>")<CR><CR>
-        "查找包含本文件的文件
-        map ,si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-        "查找本函数调用的函数
-        map ,sd :cs find d <C-R>=expand("<cword>")<CR><CR>
-        map ,vss :scs find s <C-R>=expand("<cword>")<CR><CR>
-        map ,vsg :scs find g <C-R>=expand("<cword>")<CR><CR>
-        map ,vsc :scs find c <C-R>=expand("<cword>")<CR><CR>
-        map ,vst :scs find t <C-R>=expand("<cword>")<CR><CR>
-        map ,vse :scs find e <C-R>=expand("<cword>")<CR><CR>
-        map ,vsf :scs find f <C-R>=expand("<cfile>")<CR><CR>
-        map ,vsi :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-        map ,vsd :scs find d <C-R>=expand("<cword>")<CR><CR>
+        " Add spaces after comment delimiters by default
+        let g:NERDSpaceDelims = 1
+        " Enable trimming of trailing whitespace when uncommenting
+        let g:NERDTrimTrailingWhitespace = 1
+    " }
 
+    " YCM settings ----------- {
+        let g:ycm_server_python_interpreter='/usr/bin/python2.7'
+        let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+        let g:ycm_show_diagnostics_ui = 0
+        " let g:ycm_log_level = 'debug'
+        " let g:loaded_youcompleteme = 0
+
+        " this option will lead to python occupy all system memory when edit
+        "  large project
+        " let g:ycm_collect_identifiers_from_tags_files = 1
+    " }
+
+    " python-mode settings ----------- {
+        function! SetPythonPlugin(enable)
+            let g:pymode_python  = 'python3'
+            if a:enable
+                let g:pymode = 1
+                let g:pymode_doc = 1
+                let g:pymode_virtualenv = 1
+                let g:pymode_run = 1
+                let g:pymode_breakpoint = 1
+                let g:pymode_lint = 1
+                let g:pymode_rope = 1
+                let g:pymode_rope_completion = 1
+                let g:pymode_syntax = 1
+            else
+                let g:pymode = 0
+                let g:pymode_doc = 0
+                let g:pymode_virtualenv = 0
+                let g:pymode_run = 0
+                let g:pymode_breakpoint = 0
+                let g:pymode_lint = 0
+                let g:pymode_rope = 0
+                let g:pymode_rope_completion = 0
+                let g:pymode_syntax = 0
+            endif
+        endfunction
+        autocmd BufEnter *.* :call SetPythonPlugin(0)
+        autocmd BufEnter *.py :call SetPythonPlugin(1)
+    " }
+
+    " easymotion settings ----------- {
+        let g:EasyMotion_do_mapping = 0 " disable default mappings
+
+        " Trun on case insensitive feature
+        let g:EasyMotion_smartcase = 1
+        " JK motions: Line motions
+        nmap <localleader>j <Plug>(easymotion-j)
+        nmap <localleader>k <Plug>(easymotion-k)
+        nmap <localleader>l <Plug>(easymotion-lineforward)
+        nmap <localleader>h <Plug>(easymotion-linebackward)
+
+        map  <localleader>f <Plug>(easymotion-bd-f)
+        nmap <localleader>f <Plug>(easymotion-overwin-f)
+
+        " Gif config
+        map  / <Plug>(easymotion-sn)
+        omap / <Plug>(easymotion-tn)
+    " }
+
+
+    " emmet settings ----------- {
+        function! s:EmmetCfgSet()
+
+            imap   <C-y>,   <plug>(emmet-expand-abbr)
+            imap   <C-y>;   <plug>(emmet-expand-word)
+            imap   <C-y>u   <plug>(emmet-update-tag)
+            imap   <C-y>d   <plug>(emmet-balance-tag-inward)
+            imap   <C-y>D   <plug>(emmet-balance-tag-outward)
+            imap   <C-y>n   <plug>(emmet-move-next)
+            imap   <C-y>N   <plug>(emmet-move-prev)
+            imap   <C-y>i   <plug>(emmet-image-size)
+            imap   <C-y>/   <plug>(emmet-toggle-comment)
+            imap   <C-y>j   <plug>(emmet-split-join-tag)
+            imap   <C-y>k   <plug>(emmet-remove-tag)
+            imap   <C-y>a   <plug>(emmet-anchorize-url)
+            imap   <C-y>A   <plug>(emmet-anchorize-summary)
+            imap   <C-y>m   <plug>(emmet-merge-lines)
+            imap   <C-y>c   <plug>(emmet-code-pretty)
+        endfunction
+        augroup emmet_custom_cmd
+            autocmd!
+            " close all default map before
+            let g:user_emmet_install_global = 0
+            " then set the emmet map for special file like HTML, XML, XSL and so on
+            autocmd BufEnter *.html,*.htm,*.xml,*.xsl,*.js :call s:EmmetCfgSet()
+        augroup END
+    " }
+
+    " powerline settings ----------- {
+        set nocompatible   " Disable vi-compatibility
+        set laststatus=2   " Always show the statusline
+        set encoding=utf-8 " Necessary to show Unicode glyphs
+        " modify cache dir
+        let g:Powerline_cache_dir = simplify(expand("$HOME") .'/.cache/')
+        let g:Powerline_stl_path_style = 'full'
+        " Insert the charcode segment after the filetype segment
+        call Pl#Theme#InsertSegment('charcode', 'after', 'filetype')
+    " }
+
+    " cscope settings ----------- {
+        if has("cscope")
+            set cscopequickfix=s-,c-,d-,i-,t-,e-
+            "查找声明
+            map ,ss :cs find s <C-R>=expand("<cword>")<CR><CR>
+            "查找定义
+            map ,sg :cs find g <C-R>=expand("<cword>")<CR><CR>
+            "查找调用
+            map ,sc :cs find c <C-R>=expand("<cword>")<CR><CR>
+            "查找指定字符串
+            map ,st :cs find t <C-R>=expand("<cword>")<CR><CR>
+            "查找egrep模式
+            map ,se :cs find e <C-R>=expand("<cword>")<CR><CR>
+            "查找文件
+            map ,sf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+            "查找包含本文件的文件
+            map ,si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+            "查找本函数调用的函数
+            map ,sd :cs find d <C-R>=expand("<cword>")<CR><CR>
+            map ,vss :scs find s <C-R>=expand("<cword>")<CR><CR>
+            map ,vsg :scs find g <C-R>=expand("<cword>")<CR><CR>
+            map ,vsc :scs find c <C-R>=expand("<cword>")<CR><CR>
+            map ,vst :scs find t <C-R>=expand("<cword>")<CR><CR>
+            map ,vse :scs find e <C-R>=expand("<cword>")<CR><CR>
+            map ,vsf :scs find f <C-R>=expand("<cfile>")<CR><CR>
+            map ,vsi :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+            map ,vsd :scs find d <C-R>=expand("<cword>")<CR><CR>
+        endif
 
         " tag auto switch  ----------- {{{
         function! TagAutoSwitch1()
-            let tags_pre_dir=expand($HOME . '/vim_tags_dir/')
+            let tags_pre_dir='/home/vim_tags_dir/'
 
             " __PROJECTLIST_SED_BEGIN__
             let project_dicts = {
-                \'MY_PROJECT1': '/opt/work/MY_PROJECT1',
+                \'N360_THRD_BRANCH': '/opt/work/N360/N360_THRD_BRANCH',
+                \'N360_MULTI_PPPD': '/opt/work/N360/N360_MULTI_PPPD',
+                \'N360_CUSTOM_P2': '/opt/work/N360/N360_CUSTOM_P2',
+                \'p2igmpproxy': '/opt/work/exchange_dir/p2igmpproxy',
+                \'igmpproxy-next': '/opt/work/exchange_dir/igmpproxy-next',
+                \'N360_97F': '/opt/work/N360/N360_97F',
+                \'N360_HAIER_AIRLINK': '/opt/work/N360/N360_HAIER_AIRLINK',
+                \'N360_Power4S': '/opt/work/N360/N360_Power4S',
+                \'opensrc_tea': '/opt/work/N360/opensrc_tea',
+                \'N360_P0_AIRLINK': '/opt/work/N360/N360_P0_AIRLINK',
+                \'N360_NETWORK': '/opt/work/N360/N360_NETWORK',
+                \'N360_P0_NETCORE': '/opt/work/N360/N360_P0_NETCORE',
+                \'file-5.26': '/opt/work/exchange_dir/file-5.26',
+                \'N360_P0_BRANCH': '/opt/work/N360/N360_P0_BRANCH',
+                \'N360_SEC_BRANCH': '/opt/work/N360/N360_SEC_BRANCH',
+                \'N360_AIRLINK': '/opt/work/N360/N360_AIRLINK',
+                \'N360_BRANCH': '/opt/work/N360/N360_BRANCH',
+                \'N360_TRUNK': '/opt/work/N360/N360_TRUNK',
+                \'N360_LEARN': '/opt/work/N360/N360_LEARN',
+                \'N360_P0': '/opt/work/N360/N360_P0',
+                \'st_natt': '/opt/work/st_natt',
+                \'N360_P2': '/opt/work/N360/N360_P2',
+                \'m_cgi': '/opt/work/exchange_dir/m_cgi',
             \}
             " __PROJECTLIST_SED_END__
 
@@ -418,7 +512,7 @@ filetype plugin indent on    " required
                     let tag_str = tags_pre_dir . project_name . "/tags"
                     let cscope_str = tags_pre_dir . project_name . "/cscope.out"
                     exe 'set tags='.tag_str
-                    
+
                     if cscope_connection(1, project_name)
                         " echom "already connect " . project_name . "'cscope.out!"
                     else
@@ -432,21 +526,15 @@ filetype plugin indent on    " required
                     "   MAKEFILE, MODEL, test.gif and so on
                     let g:ctrlp_custom_ignore = {
                             \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-                            \ 'file': '\v(\.[^ch]|[^.]\w$)',
+                            \ 'file': '\v^([^.]*\..*[^ch]+.*|[^.]*)$',
                             \ }
                 endif
             endfor
         endfunction
-        autocmd BufEnter *.[ch] :call TagAutoSwitch1()
+        if has("cscope")
+            autocmd BufEnter *.[ch] :call TagAutoSwitch1()
+        endif
     " }
-
-    " miniBufexpl.vim settings ----------- {
-        let g:miniBufExplMapCTabSwitchBufs=1
-        let g:miniBufExplMapWindowNavVim=1
-        let g:miniBufExplSplitBelow=0
-        let g:miniBufExplModSelTarget = 1
-    " }
-
 " }}}
 
 " GUI Settings {{{
@@ -559,7 +647,7 @@ filetype plugin indent on    " required
 
 " Vimscript file setting ----------------------------- {{{
 augroup filetype_vim
+    autocmd!
     autocmd FileType vim :setlocal foldmethod=marker
 augroup END
 " }}}
-

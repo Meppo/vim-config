@@ -260,16 +260,6 @@ Plugin 'tpope/vim-surround'          " 增加/修改/删除 引号,括号等
 Plugin 'vim-scripts/Emmet.vim'       " HTML/CSS等免除重复劳动
 Plugin 'Lokaltog/vim-powerline'      " 状态栏增强
 
-
-"Hello world!"
-    " [ 123+456 ]/2
-"Look ma, I'm HTML!"
-" if ( x>3 ) {
-" my $str = 'whee!';
-" <div>Yo!</div>
-" <div>Yo!</div>
-
-
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'lookupfile.vim'
 
@@ -472,29 +462,7 @@ filetype plugin indent on    " required
 
             " __PROJECTLIST_SED_BEGIN__
             let project_dicts = {
-                \'N360_THRD_BRANCH': '/opt/work/N360/N360_THRD_BRANCH',
-                \'N360_MULTI_PPPD': '/opt/work/N360/N360_MULTI_PPPD',
-                \'N360_CUSTOM_P2': '/opt/work/N360/N360_CUSTOM_P2',
-                \'p2igmpproxy': '/opt/work/exchange_dir/p2igmpproxy',
-                \'igmpproxy-next': '/opt/work/exchange_dir/igmpproxy-next',
-                \'N360_97F': '/opt/work/N360/N360_97F',
-                \'N360_HAIER_AIRLINK': '/opt/work/N360/N360_HAIER_AIRLINK',
-                \'N360_Power4S': '/opt/work/N360/N360_Power4S',
-                \'opensrc_tea': '/opt/work/N360/opensrc_tea',
-                \'N360_P0_AIRLINK': '/opt/work/N360/N360_P0_AIRLINK',
-                \'N360_NETWORK': '/opt/work/N360/N360_NETWORK',
-                \'N360_P0_NETCORE': '/opt/work/N360/N360_P0_NETCORE',
-                \'file-5.26': '/opt/work/exchange_dir/file-5.26',
-                \'N360_P0_BRANCH': '/opt/work/N360/N360_P0_BRANCH',
-                \'N360_SEC_BRANCH': '/opt/work/N360/N360_SEC_BRANCH',
-                \'N360_AIRLINK': '/opt/work/N360/N360_AIRLINK',
-                \'N360_BRANCH': '/opt/work/N360/N360_BRANCH',
-                \'N360_TRUNK': '/opt/work/N360/N360_TRUNK',
-                \'N360_LEARN': '/opt/work/N360/N360_LEARN',
-                \'N360_P0': '/opt/work/N360/N360_P0',
-                \'st_natt': '/opt/work/st_natt',
-                \'N360_P2': '/opt/work/N360/N360_P2',
-                \'m_cgi': '/opt/work/exchange_dir/m_cgi',
+                 \'MY_PROJECT1': '/opt/work/MY_PROJECT1',
             \}
             " __PROJECTLIST_SED_END__
 

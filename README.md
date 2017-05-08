@@ -37,6 +37,8 @@ This is my vim config file and shell script file used to generate cscope/tags fi
    
    gvim
    
+   :wm
+   
    :ctrlp  
    
   choice a file and begin to program...  ^_^

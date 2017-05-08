@@ -1,4 +1,4 @@
-" Last change:	2017/04/21
+" Last change:	2017/05/08
 "
 " To use it, copy it to
 "     for Unix and OS/2:  ~/.vimrc
@@ -155,20 +155,23 @@
     set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
-    " Remove trailing whitespaces and ^M chars
-    " autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    augroup vimrc_formmat_group
+        autocmd!
+        " Remove trailing whitespaces and ^M chars
+        " autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
 
-    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
-    autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
-    autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
-    " preceding line best in a plugin but here for now.
+        "autocmd FileType go autocmd BufWritePre <buffer> Fmt
+        autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
+        autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+        " preceding line best in a plugin but here for now.
 
-    autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+        autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 
-    " Workaround vim-commentary for Haskell
-    autocmd FileType haskell setlocal commentstring=--\ %s
-    " Workaround broken colour highlighting in Haskell
-    autocmd FileType haskell,rust setlocal nospell
+        " Workaround vim-commentary for Haskell
+        autocmd FileType haskell setlocal commentstring=--\ %s
+        " Workaround broken colour highlighting in Haskell
+        autocmd FileType haskell,rust setlocal nospell
+    augroup END
 " }}}
 
 " Key (re)Mappings {{{
@@ -189,10 +192,10 @@
     noremap <C-L>     <C-W>l
 
     " change the window size
-    nmap w= :resize +3<CR>
-    nmap w- :resize -3<CR>
-    nmap w, :vertical resize -3<CR>
-    nmap w. :vertical resize +3<CR>
+    nnoremap w= :resize +3<CR>
+    nnoremap w- :resize -3<CR>
+    nnoremap w, :vertical resize -3<CR>
+    nnoremap w. :vertical resize +3<CR>
 
     " Wrapped lines goes down/up to next row, rather than next line in file.
     noremap j gj
@@ -206,11 +209,11 @@
 
     " Map <Leader>ff to display all lines with keyword under cursor
     " and ask which one to jump to
-    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+    nnoremap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 
     " Easier horizontal scrolling
-    map zl zL
-    map zh zH
+    noremap zl zL
+    noremap zh zH
 
     " Easier formatting
     nnoremap <silent> <leader>q gwip
@@ -252,8 +255,8 @@ Plugin 'vim-scripts/AutoClose'       " 自动补全另一边括号 引号等插�
 Plugin 'vim-scripts/snipper'         " 识别不同类型语言的关键字语法插件
 Plugin 'kien/ctrlp.vim'              " 快速搜索文件工具
 Plugin 'scrooloose/nerdcommenter'    " 快速增加注释工具
-"Plugin 'Valloric/YouCompleteMe'      " 自动补全插件
-Plugin 'eikenb/acp'                " 简单的自动补全插件, 懒得安装时用来替换 YouCompleteMe
+" Plugin 'Valloric/YouCompleteMe'    " 自动补全插件
+Plugin 'eikenb/acp'                  " 简单的自动补全插件, 懒得安装时用来替换 YouCompleteMe
 Plugin 'klen/python-mode'            " python功能插件
 Plugin 'easymotion/vim-easymotion'   " 快速移动插件
 Plugin 'tpope/vim-surround'          " 增加/修改/删除 引号,括号等
@@ -291,7 +294,7 @@ filetype plugin indent on    " required
 
     " WinManager settings ----------- {
         let g:winManagerWindowLayout='FileExplorer|TagList'
-        nmap wm :WMToggle<cr>
+        nnoremap wm :WMToggle<cr>
     " }
 
     " ctrlp settings ----------- {
@@ -340,7 +343,7 @@ filetype plugin indent on    " required
     " }
 
     " python-mode settings ----------- {
-        function! SetPythonPlugin(enable)
+        function! s:SetPythonPlugin(enable)
             let g:pymode_python  = 'python3'
             if a:enable
                 let g:pymode = 1
@@ -364,8 +367,11 @@ filetype plugin indent on    " required
                 let g:pymode_syntax = 0
             endif
         endfunction
-        autocmd BufEnter *.* :call SetPythonPlugin(0)
-        autocmd BufEnter *.py :call SetPythonPlugin(1)
+        augroup python_mode_group
+            autocmd!
+            autocmd BufEnter *.* :call <SID>SetPythonPlugin(0)
+            autocmd BufEnter *.py :call <SID>SetPythonPlugin(1)
+        augroup END
     " }
 
     " easymotion settings ----------- {
@@ -383,10 +389,9 @@ filetype plugin indent on    " required
         nmap <localleader>f <Plug>(easymotion-overwin-f)
 
         " Gif config
-        map  / <Plug>(easymotion-sn)
+        nmap / <Plug>(easymotion-sn)
         omap / <Plug>(easymotion-tn)
     " }
-
 
     " emmet settings ----------- {
         function! s:EmmetCfgSet()
@@ -412,7 +417,7 @@ filetype plugin indent on    " required
             " close all default map before
             let g:user_emmet_install_global = 0
             " then set the emmet map for special file like HTML, XML, XSL and so on
-            autocmd BufEnter *.html,*.htm,*.xml,*.xsl,*.js :call s:EmmetCfgSet()
+            autocmd BufEnter *.html,*.htm,*.xml,*.xsl,*.js :call <SID>EmmetCfgSet()
         augroup END
     " }
 
@@ -431,38 +436,38 @@ filetype plugin indent on    " required
         if has("cscope")
             set cscopequickfix=s-,c-,d-,i-,t-,e-
             "查找声明
-            map ,ss :cs find s <C-R>=expand("<cword>")<CR><CR>
+            noremap ,ss :cs find s <C-R>=expand("<cword>")<CR><CR>
             "查找定义
-            map ,sg :cs find g <C-R>=expand("<cword>")<CR><CR>
+            noremap ,sg :cs find g <C-R>=expand("<cword>")<CR><CR>
             "查找调用
-            map ,sc :cs find c <C-R>=expand("<cword>")<CR><CR>
+            noremap ,sc :cs find c <C-R>=expand("<cword>")<CR><CR>
             "查找指定字符串
-            map ,st :cs find t <C-R>=expand("<cword>")<CR><CR>
+            noremap ,st :cs find t <C-R>=expand("<cword>")<CR><CR>
             "查找egrep模式
-            map ,se :cs find e <C-R>=expand("<cword>")<CR><CR>
+            noremap ,se :cs find e <C-R>=expand("<cword>")<CR><CR>
             "查找文件
-            map ,sf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+            noremap ,sf :cs find f <C-R>=expand("<cfile>")<CR><CR>
             "查找包含本文件的文件
-            map ,si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+            noremap ,si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
             "查找本函数调用的函数
-            map ,sd :cs find d <C-R>=expand("<cword>")<CR><CR>
-            map ,vss :scs find s <C-R>=expand("<cword>")<CR><CR>
-            map ,vsg :scs find g <C-R>=expand("<cword>")<CR><CR>
-            map ,vsc :scs find c <C-R>=expand("<cword>")<CR><CR>
-            map ,vst :scs find t <C-R>=expand("<cword>")<CR><CR>
-            map ,vse :scs find e <C-R>=expand("<cword>")<CR><CR>
-            map ,vsf :scs find f <C-R>=expand("<cfile>")<CR><CR>
-            map ,vsi :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-            map ,vsd :scs find d <C-R>=expand("<cword>")<CR><CR>
+            noremap ,sd :cs find d <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vss :scs find s <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vsg :scs find g <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vsc :scs find c <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vst :scs find t <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vse :scs find e <C-R>=expand("<cword>")<CR><CR>
+            noremap ,vsf :scs find f <C-R>=expand("<cfile>")<CR><CR>
+            noremap ,vsi :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+            noremap ,vsd :scs find d <C-R>=expand("<cword>")<CR><CR>
         endif
+    " }
 
-        " tag auto switch  ----------- {{{
-        function! TagAutoSwitch1()
-            let tags_pre_dir='/home/vim_tags_dir/'
+    " function get my project according to current file ----------- {
+       function! s:get_project_contained_cur_file()
 
             " __PROJECTLIST_SED_BEGIN__
             let project_dicts = {
-                 \'MY_PROJECT1': '/opt/work/MY_PROJECT1',
+                \'MY_PROJECT1': '/opt/work/MY_PROJECT1',
             \}
             " __PROJECTLIST_SED_END__
 
@@ -475,32 +480,86 @@ filetype plugin indent on    " required
                 return 0
             endif
 
+            let result = []
             for project_name in keys(project_dicts)
                 if count(path_components, project_name)
-                    let tag_str = tags_pre_dir . project_name . "/tags"
-                    let cscope_str = tags_pre_dir . project_name . "/cscope.out"
-                    exe 'set tags='.tag_str
-
-                    if cscope_connection(1, project_name)
-                        " echom "already connect " . project_name . "'cscope.out!"
-                    else
-                        exe 'cs reset'
-                        exe 'set nocsverb'
-                        exe 'cs add ' . cscope_str . " " . project_dicts[project_name]
-                        exe 'cd ' . project_dicts[project_name]
-                    endif
-
-                    " ignore the file no suffix or suffix without .c/h file like
-                    "   MAKEFILE, MODEL, test.gif and so on
-                    let g:ctrlp_custom_ignore = {
-                            \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-                            \ 'file': '\v^([^.]*\..*[^ch]+.*|[^.]*)$',
-                            \ }
+                    call add(result, project_name)
+                    call add(result, project_dicts[project_name])
+                    return result
                 endif
             endfor
         endfunction
+    " }
+
+    " ctrlp: add speical ignore pattern for my projects ----------- {
+        let my_result = s:get_project_contained_cur_file()
+        if !empty(my_result)
+            let m_igdirs = [
+                \ '\.git',
+                \ '\.hg',
+                \ '\.svn',
+                \ '_darcs',
+                \ '\.bzr',
+                \ '\.cdv',
+                \ '\~\.dep',
+                \ '\~\.dot',
+                \ '\~\.nib',
+                \ '\~\.plst',
+                \ '\.pc',
+                \ '_MTN',
+                \ 'blib',
+                \ 'CVS',
+                \ 'RCS',
+                \ 'SCCS',
+                \ '_sgbak',
+                \ 'autom4te\.cache',
+                \ 'cover_db',
+                \ '_build',
+                \ ]
+            " I just need search the file: *.c *.h
+            let m_igfiles = [
+                \ '\~$',
+                \ '#.+#$',
+                \ '\.[^.]{-2,}$',
+                \ '\.[^ch]{-1}$',
+                \ '^[^.]+$',
+                \ ]
+
+            let g:ctrlp_custom_ignore = {
+                    \ 'dir':  '\v[\/]('.join(m_igdirs, '|').')$',
+                    \ 'file': '\v'.join(m_igfiles, '|'),
+                    \ }
+        endif
+    " }
+
+    " tag auto switch  ----------- {
+        function! s:TagAutoSwitch()
+            let tags_pre_dir='/home/vim_tags_dir/'
+
+            let my_project = s:get_project_contained_cur_file()
+
+            if (empty(my_project))
+                return
+            endif
+
+            let project_name = my_project[0]
+            let project_path = my_project[1]
+
+            let tag_str = tags_pre_dir . project_name . "/tags"
+            let cscope_str = tags_pre_dir . project_name . "/cscope.out"
+            exe 'set tags='.tag_str
+
+            if cscope_connection(1, project_name)
+                " echom "already connect " . project_name . "'cscope.out!"
+            else
+                exe 'cs reset'
+                exe 'set nocsverb'
+                exe 'cs add ' . cscope_str . " " . project_path
+                exe 'cd ' . project_path
+            endif
+        endfunction
         if has("cscope")
-            autocmd BufEnter *.[ch] :call TagAutoSwitch1()
+            autocmd BufEnter *.[ch] :call <SID>TagAutoSwitch()
         endif
     " }
 " }}}
@@ -607,7 +666,7 @@ filetype plugin indent on    " required
         1
     endfunction
 
-    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+    command! -complete=file -nargs=+ Shell call <SID>RunShellCommand(<q-args>)
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     " }
 

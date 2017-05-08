@@ -534,7 +534,7 @@ filetype plugin indent on    " required
 
     " tag auto switch  ----------- {
         function! s:TagAutoSwitch()
-            let tags_pre_dir='/home/vim_tags_dir/'
+            let tags_pre_dir=expand($HOME . '/vim_tags_dir/')
 
             let my_project = s:get_project_contained_cur_file()
 

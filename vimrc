@@ -1,4 +1,4 @@
-" Last change:	2017/05/08
+" Last change:	2018/08/13
 "
 " To use it, copy it to
 "     for Unix and OS/2:  ~/.vimrc
@@ -102,6 +102,7 @@
        set backup		" keep a backup file
        set backupdir=/tmp/
     endif
+    set noswapfile
 " }}}
 
 " Vim UI {{{
@@ -255,9 +256,9 @@ Plugin 'vim-scripts/AutoClose'       " 自动补全另一边括号 引号等插�
 Plugin 'vim-scripts/snipper'         " 识别不同类型语言的关键字语法插件
 Plugin 'kien/ctrlp.vim'              " 快速搜索文件工具
 Plugin 'scrooloose/nerdcommenter'    " 快速增加注释工具
-" Plugin 'Valloric/YouCompleteMe'    " 自动补全插件
-Plugin 'eikenb/acp'                  " 简单的自动补全插件, 懒得安装时用来替换 YouCompleteMe
-Plugin 'klen/python-mode'            " python功能插件
+"Plugin 'Valloric/YouCompleteMe'      " 自动补全插件
+Plugin 'eikenb/acp'                " 简单的自动补全插件, 懒得安装时用来替换 YouCompleteMe
+"Plugin 'klen/python-mode'            " python功能插件
 Plugin 'easymotion/vim-easymotion'   " 快速移动插件
 Plugin 'tpope/vim-surround'          " 增加/修改/删除 引号,括号等
 Plugin 'vim-scripts/Emmet.vim'       " HTML/CSS等免除重复劳动
@@ -313,7 +314,10 @@ filetype plugin indent on    " required
         let g:ctrlp_open_new_file = 'r'
         " <c-z> <c-o>找开多个文件时 窗口的显示
         let g:ctrlp_open_multiple_files = 'jr'
-
+        " 结果最多显示50条
+        let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:10,results:50'
+        " 查找时等待输入关键字停止一段时间后 再开始执行查找动作, 单位(ms)
+        let g:ctrlp_lazy_update = 500
     " }
 
     " miniBufexpl.vim settings ----------- {
@@ -353,7 +357,7 @@ filetype plugin indent on    " required
                 let g:pymode_breakpoint = 1
                 let g:pymode_lint = 1
                 let g:pymode_rope = 1
-                let g:pymode_rope_completion = 1
+                let g:pymode_rope_completion = 0
                 let g:pymode_syntax = 1
             else
                 let g:pymode = 0
@@ -394,30 +398,36 @@ filetype plugin indent on    " required
     " }
 
     " emmet settings ----------- {
-        function! s:EmmetCfgSet()
 
-            imap   <C-y>,   <plug>(emmet-expand-abbr)
-            imap   <C-y>;   <plug>(emmet-expand-word)
-            imap   <C-y>u   <plug>(emmet-update-tag)
-            imap   <C-y>d   <plug>(emmet-balance-tag-inward)
-            imap   <C-y>D   <plug>(emmet-balance-tag-outward)
-            imap   <C-y>n   <plug>(emmet-move-next)
-            imap   <C-y>N   <plug>(emmet-move-prev)
-            imap   <C-y>i   <plug>(emmet-image-size)
-            imap   <C-y>/   <plug>(emmet-toggle-comment)
-            imap   <C-y>j   <plug>(emmet-split-join-tag)
-            imap   <C-y>k   <plug>(emmet-remove-tag)
-            imap   <C-y>a   <plug>(emmet-anchorize-url)
-            imap   <C-y>A   <plug>(emmet-anchorize-summary)
-            imap   <C-y>m   <plug>(emmet-merge-lines)
-            imap   <C-y>c   <plug>(emmet-code-pretty)
+        function! s:EmmetCfgSet()
+            let g:user_emmet_install_global = 1
+            let g:user_emmet_leader_key = '<C-y>'
+            let g:user_emmet_settings = {
+            \    'html': {
+            \        'empty_element_suffix': ' />',
+            \    },
+            \}
+
+            let s:emmet_settings = {
+            \    'html': {
+            \        'default_attributes': {
+            \            'a': {'href': ''},
+            \            'ins': {'datetime': '${datetime}'},
+            \            'iframe': [{'src': ''}, {'frameborder': '0'}],
+            \            'textarea': [{'name': ''}, {'id': ''}, {'cols': '30'}, {'rows': '10'}],
+            \        },
+            \    },
+            \}
+            EmmetInstall
         endfunction
+
         augroup emmet_custom_cmd
             autocmd!
+
             " close all default map before
             let g:user_emmet_install_global = 0
             " then set the emmet map for special file like HTML, XML, XSL and so on
-            autocmd BufEnter *.html,*.htm,*.xml,*.xsl,*.js :call <SID>EmmetCfgSet()
+            autocmd FileType html,htm,xml,xsl,js :call <SID>EmmetCfgSet()
         augroup END
     " }
 
@@ -492,43 +502,51 @@ filetype plugin indent on    " required
     " }
 
     " ctrlp: add speical ignore pattern for my projects ----------- {
-        let my_result = s:get_project_contained_cur_file()
+        let my_result = s:Get_project_contained_cur_file()
         if !empty(my_result)
-            let m_igdirs = [
-                \ '\.git',
-                \ '\.hg',
-                \ '\.svn',
-                \ '_darcs',
-                \ '\.bzr',
-                \ '\.cdv',
-                \ '\~\.dep',
-                \ '\~\.dot',
-                \ '\~\.nib',
-                \ '\~\.plst',
-                \ '\.pc',
-                \ '_MTN',
-                \ 'blib',
-                \ 'CVS',
-                \ 'RCS',
-                \ 'SCCS',
-                \ '_sgbak',
-                \ 'autom4te\.cache',
-                \ 'cover_db',
-                \ '_build',
-                \ ]
-            " I just need search the file: *.c *.h
-            let m_igfiles = [
-                \ '\~$',
-                \ '#.+#$',
-                \ '\.[^.]{-2,}$',
-                \ '\.[^ch]{-1}$',
-                \ '^[^.]+$',
-                \ ]
 
-            let g:ctrlp_custom_ignore = {
-                    \ 'dir':  '\v[\/]('.join(m_igdirs, '|').')$',
-                    \ 'file': '\v'.join(m_igfiles, '|'),
-                    \ }
+            " use find command and filter read from [PROJECTNAME].filter to find all project files
+            "  [PROJECTNAME].file will be gived when deal update.sh to add project
+            let m_filter_file = expand("$HOME . '/vim_tags_dir/') . my_result[0] . "/". my_result[0] . ".filter"
+            if filereadable(m_filter_file)
+                let g:ctrlp_user_command = "eval find %s `cat " . m_filter_file . " | tr -d '\\n' `"
+            else
+                let m_igdirs = [
+                    \ '\.git',
+                    \ '\.hg',
+                    \ '\.svn',
+                    \ '_darcs',
+                    \ '\.bzr',
+                    \ '\.cdv',
+                    \ '\~\.dep',
+                    \ '\~\.dot',
+                    \ '\~\.nib',
+                    \ '\~\.plst',
+                    \ '\.pc',
+                    \ '_MTN',
+                    \ 'blib',
+                    \ 'CVS',
+                    \ 'RCS',
+                    \ 'SCCS',
+                    \ '_sgbak',
+                    \ 'autom4te\.cache',
+                    \ 'cover_db',
+                    \ '_build',
+                    \ ]
+                " I just need search the file: *.c *.h
+                let m_igfiles = [
+                    \ '\~$',
+                    \ '#.+#$',
+                    \ '\.[^.]{-2,}$',
+                    \ '\.[^ch]{-1}$',
+                    \ '^[^.]+$',
+                    \ ]
+
+                let g:ctrlp_custom_ignore = {
+                        \ 'dir':  '\v[\/]('.join(m_igdirs, '|').')$',
+                        \ 'file': '\v'.join(m_igfiles, '|'),
+                        \ }
+            endif
         endif
     " }
 
@@ -536,7 +554,7 @@ filetype plugin indent on    " required
         function! s:TagAutoSwitch()
             let tags_pre_dir=expand($HOME . '/vim_tags_dir/')
 
-            let my_project = s:get_project_contained_cur_file()
+            let my_project = s:Get_project_contained_cur_file()
 
             if (empty(my_project))
                 return
@@ -557,6 +575,8 @@ filetype plugin indent on    " required
                 exe 'cs add ' . cscope_str . " " . project_path
                 exe 'cd ' . project_path
             endif
+
+            exe 'set wildignore=*.o,*.obj'
         endfunction
         if has("cscope")
             autocmd BufEnter *.[ch] :call <SID>TagAutoSwitch()

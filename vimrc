@@ -473,7 +473,7 @@ filetype plugin indent on    " required
     " }
 
     " function get my project according to current file ----------- {
-       function! s:get_project_contained_cur_file()
+       function! s:Get_project_contained_cur_file()
 
             " __PROJECTLIST_SED_BEGIN__
             let project_dicts = {
@@ -507,7 +507,7 @@ filetype plugin indent on    " required
 
             " use find command and filter read from [PROJECTNAME].filter to find all project files
             "  [PROJECTNAME].file will be gived when deal update.sh to add project
-            let m_filter_file = expand("$HOME . '/vim_tags_dir/') . my_result[0] . "/". my_result[0] . ".filter"
+            let m_filter_file = expand("$HOME") . '/vim_tags_dir/' . my_result[0] . "/" . my_result[0] . ".filter"
             if filereadable(m_filter_file)
                 let g:ctrlp_user_command = "eval find %s `cat " . m_filter_file . " | tr -d '\\n' `"
             else
